@@ -58,6 +58,31 @@ class WindowManager
 			return c;
 		}
 	}
+	#checkForNestedShapes() {
+	        let nestedShapesCount = 0;
+	
+	        // Iterate over each window data
+	        for (let i = 0; i < this.#windows.length; i++) {
+	            for (let j = 0; j < this.#windows.length; j++) {
+	                // Avoid comparing the same window with itself
+	                if (i === j) continue;
+	
+	                if (this.#isShapeInsideAnother(this.#windows[i].shape, this.#windows[j].shape)) {
+	                    nestedShapesCount++;
+	                    break; // Break inner loop once a nested shape is found for this window
+	                }
+	            }
+        	}
+		
+		if (nestedShapesCount >= 3) {
+            alert("Three or more shapes are nested inside each other!");
+        	}
+    	}
+	#isShapeInsideAnother(shape1, shape2) {
+	        return shape1.x >= shape2.x && shape1.y >= shape2.y &&
+	               (shape1.x + shape1.w) <= (shape2.x + shape2.w) &&
+	               (shape1.y + shape1.h) <= (shape2.y + shape2.h);
+    	}
 
 	// initiate current window (add metadata for custom data to store with each window instance)
 	init (metaData)
@@ -102,6 +127,9 @@ class WindowManager
 	{
 		//console.log(step);
 		let winShape = this.getWinShape();
+		this.#winData.shape = winShape;
+        	let index = this.getWindowIndexFromId(this.#id);
+        	this.#windows[index].shape = winShape;
 
 		//console.log(winShape.x, winShape.y);
 
@@ -119,6 +147,7 @@ class WindowManager
 			//console.log(windows);
 			if (this.#winShapeChangeCallback) this.#winShapeChangeCallback();
 			this.updateWindowsLocalStorage();
+			this.#checkForNestedShapes();
 		}
 	}
 
