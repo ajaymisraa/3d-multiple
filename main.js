@@ -99,9 +99,10 @@ if (new URLSearchParams(window.location.search).get("clear")) {
     function windowsUpdated() {
         updateNumberOfCubes();
     
-        // Increment shapeCounter after a new shape is created
+        // Increment shapeCounter after new shapes are created
         shapeCounter = (shapeCounter + 1) % 3;
     }
+
 
     function updateNumberOfCubes() {
         let wins = windowManager.getWindows();
