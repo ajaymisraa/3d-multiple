@@ -82,22 +82,25 @@ if (new URLSearchParams(window.location.search).get("clear")) {
         windowManager = new WindowManager();
         windowManager.setWinShapeChangeCallback(updateWindowShape);
         windowManager.setWinChangeCallback(windowsUpdated);
-
-        // Increment shapeCounter each time a new window is initialized
-        shapeCounter = (shapeCounter + 1) % 3;
-
+    
+        // Remove the line that increments shapeCounter here
+    
         // here you can add your custom metadata to each windows instance
         let metaData = {foo: "bar"};
-
+    
         // this will init the windowmanager and add this window to the centralised pool of windows
         windowManager.init(metaData);
-
+    
         // call update windows initially (it will later be called by the win change callback)
         windowsUpdated();
     }
 
+
     function windowsUpdated() {
         updateNumberOfCubes();
+    
+        // Increment shapeCounter after a new shape is created
+        shapeCounter = (shapeCounter + 1) % 3;
     }
 
     function updateNumberOfCubes() {
