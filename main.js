@@ -82,16 +82,17 @@ if (new URLSearchParams(window.location.search).get("clear")) {
         windowManager = new WindowManager();
         windowManager.setWinShapeChangeCallback(updateWindowShape);
         windowManager.setWinChangeCallback(windowsUpdated);
-
+    
         // Increment shapeCounter each time a new window is initialized
         shapeCounter = (shapeCounter + 1) % 3;
-
+        console.log("Current Shape Counter: ", shapeCounter); // Debugging line
+    
         // here you can add your custom metadata to each windows instance
         let metaData = {foo: "bar"};
-
+    
         // this will init the windowmanager and add this window to the centralised pool of windows
         windowManager.init(metaData);
-
+    
         // call update windows initially (it will later be called by the win change callback)
         windowsUpdated();
     }
@@ -102,39 +103,39 @@ if (new URLSearchParams(window.location.search).get("clear")) {
 
     function updateNumberOfCubes() {
         let wins = windowManager.getWindows();
-
-        // remove all cubes
+    
+        // remove all previous shapes
         cubes.forEach((c) => {
             world.remove(c);
         });
-
+    
         cubes = [];
-
-        // add new shapes based on the current window setup
+    
+        // add new shapes based on the current window setup and shapeCounter
         for (let i = 0; i < wins.length; i++) {
             let win = wins[i];
-
+    
             let c = new t.Color();
             c.setHSL(i * .1, 1.0, .5);
-
+    
             let s = 100 + i * 50;
             let geometry;
             switch (shapeCounter) {
                 case 0: // Cube
                     geometry = new t.BoxGeometry(s, s, s);
                     break;
-                case 1: // Triangle
-                    geometry = new t.ConeGeometry(s, s, 3); // Triangle as a 3-sided cone
+                case 1: // Triangle (using a pyramid to represent)
+                    geometry = new t.ConeGeometry(s, s, 4); // 4-sided pyramid
                     break;
-                case 2: // Circle
-                    geometry = new t.CircleGeometry(s, 32); // Circle geometry
+                case 2: // Sphere
+                    geometry = new t.SphereGeometry(s, 32, 32); // Sphere geometry
                     break;
             }
-
+    
             let shape = new t.Mesh(geometry, new t.MeshBasicMaterial({ color: c, wireframe: true }));
             shape.position.x = win.shape.x + (win.shape.w * .5);
             shape.position.y = win.shape.y + (win.shape.h * .5);
-
+    
             world.add(shape);
             cubes.push(shape);
         }
