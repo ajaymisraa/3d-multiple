@@ -132,10 +132,11 @@ class WindowManager {
                 }
             }
         }
-
+/*
         if (nestedShapesCount >= 3) {
             alert("Three or more shapes are nested inside each other!");
         }
+    */
     }
 
     // Helper method to determine if one shape is inside another
